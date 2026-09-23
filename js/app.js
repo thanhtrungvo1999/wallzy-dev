@@ -11,6 +11,7 @@ import { createWallpaperRenderer } from "./wallpaper-renderer.js";
 
         let app, db, auth, appId, userId = null;
         let wallpapers = [], cloudFavorites = [], cloudCustomGradients = [], cloudUploadedImages = [];
+        let hasMoreCloudImages = false, isLoadingMoreCloudImages = false, loadMoreImagesFromFirebase = null;
         let currentSelectedWallpaper = null, currentTab = 'explore', currentCategory = 'all', searchQuery = '';
         let displayedCount = 20, loadStepCount = 20, isSkeletonActive = true, isWallpaperDataReady = false, invalidUrlActive = false;
 window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
@@ -85,8 +86,15 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
                 ]);
                 let authController;
                 const firebase = await initFirebase({
-                    onImagesLoaded: images => {
-                        cloudUploadedImages = images;
+                    onImagesLoaded: (images, hasMore = false) => {
+                        if (!isWallpaperDataReady) {
+                            cloudUploadedImages = images;
+                            displayedCount = images.length;
+                        } else if (images?.length) {
+                            cloudUploadedImages = [...cloudUploadedImages, ...images];
+                            displayedCount += images.length;
+                        }
+                        hasMoreCloudImages = Boolean(hasMore);
                         isSkeletonActive = false; isWallpaperDataReady = true;
                         updateWallpapersList(); checkUrlParamForImage();
                     },
@@ -113,6 +121,7 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
                     }
                 });
                 app = firebase.app; db = firebase.db; auth = firebase.auth; appId = firebase.appId;
+                loadMoreImagesFromFirebase = firebase.loadMoreImages;
                 authController = createAuthController({ getAuth: firebase.auth });
             } catch (e) {
                 console.error('[Wallzy] Firebase bootstrap failed:', e);
@@ -221,7 +230,7 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
         createSearchController({
             getRefreshCurrentView: () => refreshCurrentView(),
             setSearchQuery: value => { searchQuery = value; },
-            resetDisplayedCount: () => { displayedCount = 10; }
+            resetDisplayedCount: () => { displayedCount = 20; }
         });
 
         createNavigationController({
@@ -240,6 +249,7 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
             getCurrentCategory: () => currentCategory,
             getSearchQuery: () => searchQuery,
             getDisplayedCount: () => displayedCount,
+            getHasMoreCloudImages: () => hasMoreCloudImages,
             isSkeletonActive: () => isSkeletonActive,
             getThumbnailUrl,
             refreshCurrentView: () => refreshCurrentView()
@@ -269,9 +279,28 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
             else if (currentTab === 'favorites') wallpaperRenderer.renderFavoritesView();
         }
 
-        window.loadMoreWallpapers = () => {
-            displayedCount += loadStepCount;
-            refreshCurrentView();
+        window.loadMoreWallpapers = async () => {
+            if (isLoadingMoreCloudImages || !hasMoreCloudImages || !loadMoreImagesFromFirebase) return;
+
+            isLoadingMoreCloudImages = true;
+            const button = document.getElementById('loadMoreBtn');
+            if (button) {
+                button.disabled = true;
+                button.textContent = 'Loading...';
+            }
+
+            try {
+                await loadMoreImagesFromFirebase();
+            } catch (error) {
+                console.error('[Wallzy] Load more failed:', error);
+                showMessage('Unable to load more wallpapers. Please try again.');
+            } finally {
+                isLoadingMoreCloudImages = false;
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = 'Load more';
+                }
+            }
         };
 
         function applyRouteFromUrl() {

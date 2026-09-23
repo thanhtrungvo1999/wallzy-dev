@@ -4,12 +4,15 @@ export function createWallpaperRenderer({
     getCurrentCategory,
     getSearchQuery,
     getDisplayedCount,
+    getHasMoreCloudImages,
     isSkeletonActive,
     getThumbnailUrl,
     refreshCurrentView
 }) {
     let shuffledAll = [];
     let shuffledSignature = '';
+    let renderedIds = new Set();
+    let renderedViewSignature = '';
 
     function getStableAllOrder(list) {
         const signature = list.map(w => String(w.id)).join('|');
@@ -82,9 +85,16 @@ export function createWallpaperRenderer({
         const paginationContainer = document.getElementById('paginationContainer');
         if (!grid) return;
 
-        grid.replaceChildren();
+        const viewSignature = category + '|' + getSearchQuery();
+        if (viewSignature !== renderedViewSignature) {
+            renderedViewSignature = viewSignature;
+            grid.replaceChildren();
+            renderedIds.clear();
+        }
 
         if (isSkeletonActive()) {
+            grid.replaceChildren();
+            renderedIds.clear();
             for (let i = 0; i < 4; i++) {
                 const skeleton = document.createElement('div');
                 skeleton.className = 'relative group rounded-3xl overflow-hidden aspect-[9/16] shadow-sm skeleton-wave';
@@ -113,19 +123,16 @@ export function createWallpaperRenderer({
 
         const fragment = document.createDocumentFragment();
         filtered.slice(0, getDisplayedCount()).forEach(w => {
+            if (renderedIds.has(String(w.id))) return;
             fragment.appendChild(
                 createWallpaperCard(w, getCloudFavorites().some(f => f.id === w.id))
             );
+            renderedIds.add(String(w.id));
         });
         grid.appendChild(fragment);
 
-        if (filtered.length > getDisplayedCount()) {
-            paginationContainer?.classList.remove('hidden');
-            const remaining = document.getElementById('remainingCount');
-            if (remaining) remaining.innerText = filtered.length - getDisplayedCount();
-        } else {
-            paginationContainer?.classList.add('hidden');
-        }
+        if (getHasMoreCloudImages?.()) paginationContainer?.classList.remove('hidden');
+        else paginationContainer?.classList.add('hidden');
     }
 
     function renderFavoritesView() {
@@ -134,6 +141,7 @@ export function createWallpaperRenderer({
         if (!grid) return;
 
         grid.replaceChildren();
+        renderedIds.clear();
 
         const filtered = filterItemsBySearchAndCategory(getCloudFavorites(), getCurrentCategory());
         if (filtered.length === 0) {
