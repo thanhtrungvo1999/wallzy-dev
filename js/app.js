@@ -14,6 +14,8 @@ import { createWallpaperRenderer } from "./wallpaper-renderer.js";
         let hasMoreCloudImages = false, isLoadingMoreCloudImages = false, loadMoreImagesFromFirebase = null, getImageByIdFromFirebase = null;
         let currentSelectedWallpaper = null, currentTab = 'explore', currentCategory = 'all', searchQuery = '';
         let displayedCount = 20, loadStepCount = 20, isSkeletonActive = true, isWallpaperDataReady = false, invalidUrlActive = false;
+        const SKELETON_MIN_TIME = 700;
+        const skeletonStartedAt = Date.now();
 window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
 
 
@@ -95,8 +97,17 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
                             displayedCount += images.length;
                         }
                         hasMoreCloudImages = Boolean(hasMore);
-                        isSkeletonActive = false; isWallpaperDataReady = true;
-                        updateWallpapersList(); checkUrlParamForImage();
+
+                        const finishInitialLoad = () => {
+                            isSkeletonActive = false;
+                            isWallpaperDataReady = true;
+                            updateWallpapersList();
+                            checkUrlParamForImage();
+                        };
+
+                        const elapsed = Date.now() - skeletonStartedAt;
+                        const remaining = Math.max(0, SKELETON_MIN_TIME - elapsed);
+                        setTimeout(finishInitialLoad, remaining);
                     },
                     onImagesError: () => {
                         isSkeletonActive = false; isWallpaperDataReady = true; cloudUploadedImages = [];
