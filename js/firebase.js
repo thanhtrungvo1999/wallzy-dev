@@ -1,13 +1,13 @@
-const appId = 'wallzy-gold';
+const appId = 'quan-ly-tai-chinh-d0bf1';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDJyZtgmuLg-vHNAwY9xvzvvEambF4jMS8",
-    authDomain: "wallzy-gold.firebaseapp.com",
-    projectId: "wallzy-gold",
-    storageBucket: "wallzy-gold.firebasestorage.app",
-    messagingSenderId: "145422325585",
-    appId: "1:145422325585:web:d0a4c030e88cf172cd2570",
-    measurementId: "G-KLCYTT8MTC"
+    apiKey: "AIzaSyDHOQSdlPxPstS3cTzAgg43qIK-HjGrZxI",
+    authDomain: "quan-ly-tai-chinh-d0bf1.firebaseapp.com",
+    projectId: "quan-ly-tai-chinh-d0bf1",
+    storageBucket: "quan-ly-tai-chinh-d0bf1.firebasestorage.app",
+    messagingSenderId: "1054695985785",
+    appId: "1:1054695985785:web:c24cfb396738010438baa8",
+    measurementId: "G-H9E9B4NLYJ"
 };
 
 export async function initFirebase({
