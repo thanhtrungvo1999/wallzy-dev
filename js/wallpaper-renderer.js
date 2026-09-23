@@ -106,6 +106,9 @@ export function createWallpaperRenderer({
         if (isSkeletonActive()) {
             grid.replaceChildren();
             renderedIds.clear();
+            // Force the first real render after loading to clear these
+            // temporary skeleton nodes instead of appending below them.
+            renderedViewSignature = '';
             for (let i = 0; i < 4; i++) {
                 const skeleton = document.createElement('div');
                 skeleton.className = 'relative group rounded-3xl overflow-hidden aspect-[9/16] shadow-sm skeleton-wave';
