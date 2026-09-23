@@ -56,12 +56,23 @@ export function createWallpaperRenderer({
         skeleton.className = 'absolute inset-0 skeleton-wave z-0';
 
         const img = document.createElement('img');
-        img.src = getThumbnailUrl(w.url);
         img.dataset.originalSrc = w.url || '';
         img.loading = 'lazy';
         img.decoding = 'async';
         img.className = 'w-full h-full object-cover relative z-10 transition-opacity duration-500 opacity-0';
         bindImage(img, w);
+        img.src = getThumbnailUrl(w.url);
+
+        // Cached images can finish before the load listener is observed.
+        // Reveal them immediately when the browser already has the image.
+        if (img.complete) {
+            if (img.naturalWidth > 0) {
+                img.classList.remove('opacity-0');
+                img.previousElementSibling?.remove();
+            } else {
+                window.handleImageError?.(img);
+            }
+        }
 
         const favButton = document.createElement('button');
         favButton.type = 'button';
