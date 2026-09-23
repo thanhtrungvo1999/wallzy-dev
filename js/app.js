@@ -11,7 +11,7 @@ import { createWallpaperRenderer } from "./wallpaper-renderer.js";
 
         let app, db, auth, appId, userId = null;
         let wallpapers = [], cloudFavorites = [], cloudCustomGradients = [], cloudUploadedImages = [];
-        let hasMoreCloudImages = false, isLoadingMoreCloudImages = false, loadMoreImagesFromFirebase = null;
+        let hasMoreCloudImages = false, isLoadingMoreCloudImages = false, loadMoreImagesFromFirebase = null, getImageByIdFromFirebase = null;
         let currentSelectedWallpaper = null, currentTab = 'explore', currentCategory = 'all', searchQuery = '';
         let displayedCount = 20, loadStepCount = 20, isSkeletonActive = true, isWallpaperDataReady = false, invalidUrlActive = false;
 window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
@@ -122,6 +122,7 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
                 });
                 app = firebase.app; db = firebase.db; auth = firebase.auth; appId = firebase.appId;
                 loadMoreImagesFromFirebase = firebase.loadMoreImages;
+                getImageByIdFromFirebase = firebase.getImageById;
                 authController = createAuthController({ getAuth: firebase.auth });
             } catch (e) {
                 console.error('[Wallzy] Firebase bootstrap failed:', e);
@@ -303,11 +304,22 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
             }
         };
 
-        function applyRouteFromUrl() {
+        async function applyRouteFromUrl() {
             window.__wallzyApplyingRoute = true;
             const path = window.location.pathname.replace(/\/+$/, '') || '/';
-            const wallpaper = findWallpaperFromPath();
+            let wallpaper = findWallpaperFromPath();
             const categoryFromPath = findCategoryFromPath(path);
+
+            if (!wallpaper && /^\/wallpaper\/.+/i.test(path) && getImageByIdFromFirebase) {
+                const match = path.match(/^\/wallpaper\/(.+)-([^/-]+)\/?$/i);
+                if (match) {
+                    try {
+                        wallpaper = await getImageByIdFromFirebase(decodeURIComponent(match[2]));
+                    } catch (error) {
+                        console.error('[Wallzy] Direct wallpaper load failed:', error);
+                    }
+                }
+            }
 
             if (wallpaper) {
                 invalidUrlActive = false;
@@ -322,7 +334,7 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
             let tab = 'explore';
             if (categoryFromPath) {
                 currentCategory = categoryFromPath;
-                displayedCount = 10;
+                displayedCount = 20;
                 invalidUrlActive = false;
                 document.getElementById('invalidUrlScreen')?.classList.add('hidden');
                 switchMainTab('explore', document.getElementById('navExploreBtn'));
@@ -387,12 +399,12 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
             else window.goHomeFromInvalidUrl();
         };
 
-        function checkUrlParamForImage() {
-            applyRouteFromUrl();
+        async function checkUrlParamForImage() {
+            await applyRouteFromUrl();
         }
 
         window.addEventListener('popstate', () => {
-            if (isWallpaperDataReady) applyRouteFromUrl();
+            if (isWallpaperDataReady) void applyRouteFromUrl();
         });
 
         window.toggleFavorite = id => {

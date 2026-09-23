@@ -20,7 +20,7 @@ export async function initFirebase({
     const [
         { initializeApp },
         { getAuth, onAuthStateChanged },
-        { getFirestore, collection, doc, getDocs, onSnapshot, query, orderBy, limit, startAfter }
+        { getFirestore, collection, doc, getDoc, getDocs, onSnapshot, query, orderBy, limit, startAfter }
     ] = await Promise.all([
         import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"),
         import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"),
@@ -82,5 +82,9 @@ export async function initFirebase({
         const page = await loadImagePage();
         onImagesLoaded?.(page.images, page.hasMore);
         return page;
+    }, getImageById: async id => {
+        if (!id) return null;
+        const snapshot = await getDoc(doc(imagesCollection, String(id)));
+        return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
     }};
 }
