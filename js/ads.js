@@ -1,7 +1,7 @@
 // Wallzy shared ad units — one source for every tab
 const WALLZY_ADS = {
     '320x50': { key: '2c49a0e222fe3b51d12473cd1592ca66', width: 320, height: 50, provider: 'highrevenue' },
-    '300x250': { key: '66531d847e0e04e4e76d697b014ef012', width: 300, height: 250, provider: 'profitablerate' }
+    '300x250': { key: 'd57e1d0e6497dfaa47e074d39d673693', width: 300, height: 250, provider: 'profitablerate' }
 };
 
 function renderWallzyAd(slot, size) {
