@@ -261,7 +261,7 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
             getCloudUploadedImages: () => cloudUploadedImages,
             getCurrentCategory: () => currentCategory,
             setCurrentCategory: value => { currentCategory = value; },
-            resetDisplayedCount: () => { displayedCount = 10; },
+            resetDisplayedCount: () => { displayedCount = 20; },
             refreshCurrentView: () => refreshCurrentView(),
             setCategorySEO,
             setAppRoute,
