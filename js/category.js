@@ -65,6 +65,10 @@ export function createCategoryController({
         });
 
         window.refreshTopControlsHeight?.();
+        requestAnimationFrame(() => {
+            window.refreshTopControlsHeight?.();
+            requestAnimationFrame(() => window.refreshTopControlsHeight?.());
+        });
     }
 
     window.filterCategory = (cat, el) => {
