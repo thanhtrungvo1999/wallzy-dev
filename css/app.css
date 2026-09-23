@@ -1,0 +1,234 @@
+::-webkit-scrollbar { width: 3px; height: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        .animate-spin-slow { animation: spin 3s linear infinite; }
+
+        #wallpaperGrid > .wallzy-card,
+        #savedGradientGrid > .wallzy-card,
+        #tiktokImageGrid > .wallzy-card {
+            content-visibility: auto;
+            contain-intrinsic-size: 0 320px;
+        }
+
+        img {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+            -webkit-user-drag: none !important;
+            will-change: opacity;
+        }
+
+        @keyframes shimmerWave {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .wallzy-card {
+            content-visibility: auto;
+            contain-intrinsic-size: 0 540px;
+        }
+
+        .skeleton-wave {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(90deg, rgba(255,255,255,.025) 0%, rgba(255,255,255,.07) 42%, rgba(255,255,255,.13) 50%, rgba(255,255,255,.07) 58%, rgba(255,255,255,.025) 100%),
+                #0a0a0c;
+            background-size: 220% 100%;
+            animation: shimmerWave 1.65s cubic-bezier(.4,0,.2,1) infinite;
+        }
+
+        .skeleton-wave::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.055) 50%, transparent 65%);
+            transform: translateX(-100%);
+            animation: skeletonSweep 2.2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes skeletonSweep {
+            0%, 35% { transform: translateX(-100%); }
+            70%, 100% { transform: translateX(100%); }
+        }
+
+        .wallzy-loader-orb { animation: wallzyLoaderFloat 2.2s ease-in-out infinite; }
+        .wallzy-loader-ring { animation: wallzyLoaderRing 1.8s cubic-bezier(.4,0,.2,1) infinite; }
+        .wallzy-loader-dot { animation: wallzyLoaderDot 1.2s ease-in-out infinite; }
+
+        @keyframes wallzyLoaderFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.035); }
+        }
+        @keyframes wallzyLoaderRing {
+            0% { transform: rotate(0deg) scale(.92); opacity: .35; }
+            50% { transform: rotate(180deg) scale(1); opacity: .8; }
+            100% { transform: rotate(360deg) scale(.92); opacity: .35; }
+        }
+        @keyframes wallzyLoaderDot {
+            0%, 100% { transform: scale(.7); opacity: .3; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+        @keyframes wallzyLoadingBar {
+            0% { transform: translateX(-100%); opacity: .25; }
+            50% { transform: translateX(50%); opacity: 1; }
+            100% { transform: translateX(200%); opacity: .25; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .skeleton-wave, .skeleton-wave::after, .wallzy-loader-orb,
+            .wallzy-loader-ring, .wallzy-loader-dot { animation: none !important; }
+        }
+
+        #landscapeWarning { display: none; }
+        @media screen and (orientation: landscape) and (max-height: 600px) {
+            #landscapeWarning { display: flex !important; }
+            #appContainer { display: none !important; }
+        }
+    
+        .wallzy-card {
+            transform: translateZ(0);
+            transition: transform 220ms cubic-bezier(.2,.8,.2,1), border-color 220ms ease, box-shadow 220ms ease;
+        }
+        .wallzy-card img { transition: opacity 500ms ease, transform 420ms cubic-bezier(.2,.8,.2,1); }
+
+        @media (hover: hover) and (pointer: fine) {
+            .wallzy-card:hover {
+                transform: translateY(-3px) translateZ(0);
+                border-color: rgba(255,255,255,.18);
+                box-shadow: 0 16px 34px rgba(0,0,0,.28);
+            }
+            .wallzy-card:hover img { transform: scale(1.025); }
+        }
+
+        .wallzy-card:active { transform: scale(.985) translateZ(0); }
+        #searchInput:focus, #tiktokUrlInput:focus { box-shadow: 0 0 0 3px rgba(255,255,255,.035), 0 8px 28px rgba(0,0,0,.22); }
+
+        #detailModal {
+            opacity: 0; transform: scale(1.018);
+            transition: opacity 220ms ease, transform 280ms cubic-bezier(.2,.8,.2,1);
+        }
+        #detailModal.modal-visible { opacity: 1; transform: scale(1); }
+        #detailModal #imageWrapperContainer { transition: transform 320ms cubic-bezier(.2,.8,.2,1); }
+        #detailModal.modal-visible #imageWrapperContainer { transform: translateY(0); }
+        #detailModal:not(.modal-visible) #imageWrapperContainer { transform: translateY(8px); }
+
+        #detailImg {
+            transform: scale(.985);
+            transition: opacity 320ms ease, transform 420ms cubic-bezier(.2,.8,.2,1);
+        }
+        #detailImg:not(.opacity-0) { transform: scale(1); }
+
+        .modal-action-button {
+            transition: transform 160ms cubic-bezier(.2,.8,.2,1), background-color 180ms ease, border-color 180ms ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .modal-action-button:active { transform: scale(.965); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .wallzy-card, .wallzy-card img, #detailModal, #detailModal #imageWrapperContainer,
+            #detailImg, .modal-action-button { transition: none !important; }
+        }
+
+        /* Download progress overlay */
+        #downloadLoadingOverlay {
+            position: fixed; inset: 0; z-index: 150000; display: flex;
+            align-items: center; justify-content: center; padding: 24px;
+            background: rgba(0, 0, 0, .72); backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+        #downloadLoadingOverlay.hidden { display: none; }
+        .download-loading-card {
+            width: min(320px, 100%); padding: 24px; border-radius: 28px;
+            background: rgba(18, 18, 21, .94); border: 1px solid rgba(255,255,255,.10);
+            box-shadow: 0 24px 80px rgba(0,0,0,.55); text-align: center;
+        }
+        .download-spinner {
+            width: 42px; height: 42px; margin: 0 auto 16px;
+            border: 3px solid rgba(255,255,255,.16); border-top-color: #fff;
+            border-radius: 50%; animation: downloadSpin .8s linear infinite;
+        }
+        @keyframes downloadSpin { to { transform: rotate(360deg); } }
+        .download-progress-track {
+            width: 100%; height: 4px; margin-top: 16px; overflow: hidden;
+            border-radius: 99px; background: rgba(255,255,255,.10);
+        }
+        .download-progress-bar {
+            width: 35%; height: 100%; border-radius: inherit; background: #fff;
+            animation: downloadProgress 1.25s ease-in-out infinite;
+        }
+        @keyframes downloadProgress { 0% { transform: translateX(-130%); } 100% { transform: translateX(390%); } }
+        .download-loading-status { margin-top: 7px; min-height: 16px; font-size: 10px; color: rgba(255,255,255,.42); }
+
+        /* Native iOS-style touch feedback */
+        .ripple-target {
+            overflow: hidden !important; -webkit-tap-highlight-color: transparent !important;
+            touch-action: manipulation; -webkit-user-select: none; user-select: none;
+        }
+        .ripple-target.ripple-positioned { position: relative; }
+        .ripple-target.ripple-press { transform: scale(0.985); transition: transform 110ms cubic-bezier(0.2, 0, 0, 1); }
+        .ripple-target.ripple-release { transform: scale(1); transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .native-ripple {
+            position: absolute; left: 0; top: 0; width: 18px; height: 18px; border-radius: 50%;
+            pointer-events: none; z-index: 9999; background: rgba(255,255,255,.20);
+            transform: translate(-50%, -50%) scale(0); opacity: 0;
+            animation: nativeRippleExpand 520ms cubic-bezier(.2,.75,.2,1) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes nativeRippleExpand {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            12% { opacity: .42; }
+            48% { opacity: .20; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ripple-target.ripple-press, .ripple-target.ripple-release { transition-duration: 80ms; }
+            .native-ripple { animation-duration: 180ms; }
+        }
+
+/* Shared ad frame layouts */
+.wallzy-ad-frame-320 {
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.wallzy-ad-frame-320 > .wallzy-ad-frame-inner {
+    width: 100%;
+    height: 60px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: #0a0a0c;
+    box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wallzy-ad-frame-300 {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.wallzy-ad-frame-300 > .wallzy-ad-frame-inner {
+    width: 100%;
+    height: 260px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: #0a0a0c;
+    box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

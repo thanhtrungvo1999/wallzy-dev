@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta name="description" id="pageDescription" content="Wallzy - 4K UHD wallpapers for your phone.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" id="canonicalUrl" href="/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" id="ogTitle" content="Wallzy - 4K UHD Wallpapers">
+    <meta property="og:description" id="ogDescription" content="Discover 4K UHD wallpapers on Wallzy.">
+    <meta property="og:url" id="ogUrl" content="/">
+    <meta property="og:image" id="ogImage" content="">
+    <meta property="og:site_name" content="Wallzy">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="twitterTitle" content="Wallzy - 4K UHD Wallpapers">
+    <meta name="twitter:description" id="twitterDescription" content="Discover 4K UHD wallpapers on Wallzy.">
+    <meta name="twitter:image" id="twitterImage" content="">
+    <meta name="twitter:url" id="twitterUrl" content="/">
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+    <script type="application/ld+json" id="structuredData">{}</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>Wallzy Wallpaper Studio - Cloud Database</title>
+    
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta name="theme-color" content="#08080a">
+
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.highrevenueformat.com">
+    <link rel="preconnect" href="https://pl31436544.profitableratecpmnetwork.com">
+    <link rel="preconnect" href="https://images.weserv.nl">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <script>
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adConfig = window.adConfig || function () { adsbygoogle.push(arguments); };
+        adConfig({ preloadAdBreaks: 'on', sound: 'on' });
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        minimal: {
+                            bg: '#000000', card: '#0a0a0c', darkBg: '#000000', darkCard: '#0a0a0c',
+                            borderLight: 'rgba(255, 255, 255, 0.08)', borderDark: 'rgba(255, 255, 255, 0.08)'
+                        }
+                    }
+                }
+            }
+        }
+
+        document.addEventListener('gesturestart', e => e.preventDefault());
+        document.addEventListener('gesturechange', e => e.preventDefault());
+        document.addEventListener('gestureend', e => e.preventDefault());
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', e => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) e.preventDefault();
+            lastTouchEnd = now;
+        }, { passive: false });
+    </script>
+
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body class="bg-[#000000] text-gray-100 min-h-screen flex items-center justify-center selection:bg-white selection:text-black overflow-x-hidden font-sans overflow-hidden" id="bodyElement">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            const registerWallzySW = () => navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                .catch(e => console.warn('Wallzy service worker registration failed:', e));
+
+            window.addEventListener('load', () => {
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(registerWallzySW, { timeout: 1800 });
+                } else {
+                    setTimeout(registerWallzySW, 1200);
+                }
+            }, { once: true });
+        }
+    </script>
+
+    <div id="offlineWarningModal" class="fixed inset-0 bg-[#000000] z-[99999] flex-col items-center justify-center p-8 text-center w-full h-full hidden">
+        <div class="w-20 h-20 bg-[#121215] border border-white/10 rounded-3xl flex items-center justify-center mb-6 shadow-2xl relative">
+            <i class="fa-solid fa-wifi text-3xl text-red-500 animate-pulse"></i>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-12 h-[2px] bg-red-500 rotate-45 transform"></div>
+            </div>
+        </div>
+        <h2 class="text-xl font-extrabold text-white mb-2 tracking-tight">No Internet Connection</h2>
+        <p class="text-xs text-gray-400 max-w-[280px] leading-relaxed mb-6">Your device is currently offline. Please check your Wi-Fi or mobile data connection to continue using the app.</p>
+        <button onclick="checkNetworkStatus()" class="px-6 py-3 bg-white text-black font-semibold rounded-2xl text-xs transition cursor-pointer shadow-lg active:scale-95">
+            Try Again
+        </button>
+    </div>
+
+    <div id="invalidUrlScreen" class="fixed inset-0 bg-[#08080a] z-[130000] hidden items-center justify-center p-6 text-center overflow-hidden">
+        <div class="w-full max-w-sm mx-auto">
+            <div class="mx-auto mb-7 w-20 h-20 rounded-[28px] bg-white/[0.06] border border-white/10 flex items-center justify-center shadow-2xl">
+                <i class="fa-solid fa-link-slash text-2xl text-white/80"></i>
+            </div>
+            <div class="text-[11px] font-semibold tracking-[0.28em] uppercase text-white/35 mb-3">Error 404</div>
+            <h1 class="text-2xl font-bold text-white tracking-tight">Page Not Found</h1>
+            <p id="invalidUrlMessage" class="mt-3 text-sm leading-6 text-white/45">This URL does not exist or the wallpaper has been removed.</p>
+            <div class="mt-7 flex flex-col gap-2.5">
+                <button onclick="goHomeFromInvalidUrl()" class="w-full bg-white text-black font-semibold py-3.5 rounded-2xl transition active:scale-[0.98]">
+                    <i class="fa-solid fa-house mr-2"></i>Home
+                </button>
+                <button onclick="goBackFromInvalidUrl()" class="w-full bg-white/[0.06] hover:bg-white/[0.10] text-white font-semibold py-3.5 rounded-2xl transition border border-white/10 active:scale-[0.98]">
+                    <i class="fa-solid fa-arrow-left mr-2"></i>Go Back
+                </button>
+            </div>
+            <div id="invalidUrlPath" class="mt-6 text-[10px] text-white/20 break-all px-3"></div>
+        </div>
+    </div>
+
+    <div id="landscapeWarning" class="fixed inset-0 bg-[#000000] z-[9999] flex-col items-center justify-center p-8 text-center w-full h-full">
+        <div class="relative mb-6">
+            <i class="fa-solid fa-mobile-screen text-6xl text-white"></i>
+            <i class="fa-solid fa-rotate-right text-2xl text-gray-400 absolute -bottom-2 -right-4 animate-spin-slow"></i>
+        </div>
+        <h2 class="text-xl font-bold text-white mb-2">Rotate Your Device</h2>
+        <p class="text-sm text-gray-400 max-w-[300px]">The app is optimized for portrait mode. Please rotate your device to continue.</p>
+    </div>
+
+    <div id="downloadLoadingOverlay" class="hidden" aria-live="polite" aria-busy="true">
+        <div class="download-loading-card">
+            <div class="download-spinner"></div>
+            <div id="downloadLoadingTitle" class="text-sm font-bold text-white">Preparing download</div>
+            <div id="downloadLoadingStatus" class="download-loading-status">Getting the original wallpaper...</div>
+            <div class="download-progress-track">
+                <div class="download-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="appContainer" class="w-full max-w-md h-[100vh] sm:h-[92vh] sm:rounded-[40px] sm:border-[8px] sm:border-[#1c1c1e] shadow-2xl overflow-hidden flex flex-col relative bg-[#000000] transition-colors duration-500 will-change-transform">
+
+        <!-- Splash Screen -->
+        <div id="splashScreen" class="absolute inset-0 bg-[#08080a] z-[999] flex flex-col items-center justify-center transition-all duration-700 ease-out overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none opacity-40">
+                <div class="absolute left-1/2 top-1/2 w-72 h-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.025] blur-3xl"></div>
+            </div>
+            <div class="relative mb-7 wallzy-loader-orb">
+                <div class="absolute -inset-5 rounded-[38px] border border-white/[0.035] wallzy-loader-ring"></div>
+                <div class="absolute -inset-2.5 rounded-[32px] border border-white/[0.08]"></div>
+                <div class="relative w-20 h-20 rounded-[26px] bg-white p-[1px] shadow-[0_20px_60px_rgba(0,0,0,.45)]">
+                    <div class="w-full h-full rounded-[25px] bg-[#0a0a0c] overflow-hidden flex items-center justify-center">
+                        <img src="/icons/icon-512.png" alt="Wallzy" class="w-full h-full object-cover" draggable="false">
+                    </div>
+                </div>
+                <div class="absolute -bottom-1.5 -right-1.5 w-7 h-7 bg-white text-black rounded-full flex items-center justify-center text-[10px] shadow-xl border-2 border-[#08080a]">
+                    <i class="fa-solid fa-cloud"></i>
+                </div>
+            </div>
+            <div class="text-center relative z-10">
+                <h1 class="font-extrabold text-[19px] tracking-[0.16em] text-white">WALLZY</h1>
+                <p class="mt-1.5 text-[9px] text-white/35 font-semibold tracking-[0.28em] uppercase">Wallpaper Studio</p>
+            </div>
+            <div class="mt-9 w-28">
+                <div class="h-[2px] w-full rounded-full bg-white/[0.07] overflow-hidden">
+                    <div class="h-full w-1/2 rounded-full bg-white/80 animate-[wallzyLoadingBar_1.35s_ease-in-out_infinite]"></div>
+                </div>
+                <div class="mt-2 flex items-center justify-center gap-1.5">
+                    <span class="wallzy-loader-dot w-1 h-1 rounded-full bg-white/80"></span>
+                    <span class="wallzy-loader-dot w-1 h-1 rounded-full bg-white/50 [animation-delay:.15s]"></span>
+                    <span class="wallzy-loader-dot w-1 h-1 rounded-full bg-white/25 [animation-delay:.3s]"></span>
+                </div>
+            </div>
+            <div class="absolute bottom-8 text-[8px] tracking-[0.22em] uppercase text-white/20">Preparing your wallpapers</div>
+        </div>
+
+        <header id="headerEl" class="absolute top-0 left-0 right-0 z-40 bg-[#000000]/90 backdrop-blur-xl px-5 py-3.5 flex justify-between items-center border-b border-white/10 transition-transform duration-300 ease-in-out will-change-transform">
+            <div class="flex items-center space-x-2">
+                <span class="font-bold text-lg tracking-tight text-white">Wallzy DB.</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="openInstallModal()" class="w-9 h-9 rounded-full bg-[#121215] border border-white/10 flex items-center justify-center text-gray-200 hover:bg-[#222228] transition cursor-pointer" title="Install">
+                    <i class="fa-solid fa-mobile-screen-button text-xs text-white"></i>
+                </button>
+                <button id="authHeaderBtn" onclick="openAuthModal()" class="px-3 py-1.5 rounded-full bg-[#121215] hover:bg-[#222228] text-gray-200 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer border border-white/10" title="Account">
+                    <i class="fa-solid fa-user-circle text-xs text-white"></i>
+                    <span id="authButtonText">Account</span>
+                </button>
+            </div>
+        </header>
+
+        <div id="topControlsWrapper" class="absolute left-0 right-0 z-[35] bg-[#000000]/90 backdrop-blur-xl transition-[top,transform] duration-300 ease-in-out will-change-transform">
+            <div id="searchBarContainer" class="px-5 pt-3 pb-1 bg-transparent">
+                <div class="relative flex items-center">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-gray-400 text-xs pointer-events-none"></i>
+                    <input type="text" id="searchInput" oninput="handleSearchInput(this.value)" placeholder="Search keywords, categories, tags..." class="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl py-2.5 pl-10 pr-9 text-[16px] sm:text-xs text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition shadow-inner">
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="absolute right-3 text-gray-400 hover:text-white text-xs hidden cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <nav id="categoryNav" class="w-full min-w-0 px-5 py-2.5 flex space-x-2 overflow-x-auto scrollbar-none bg-transparent">
+                <div class="h-9 w-24 rounded-full skeleton-wave flex-shrink-0"></div>
+                <div class="h-9 w-28 rounded-full skeleton-wave flex-shrink-0"></div>
+                <div class="h-9 w-20 rounded-full skeleton-wave flex-shrink-0"></div>
+            </nav>
+        </div>
+
+        <main class="flex-1 px-5 py-2 pb-36 overflow-y-auto scrollbar-none bg-transparent" id="mainScrollArea">
+        <!-- Shared ads: one persistent app-level component, like header/footer -->
+        <div id="sharedAdArea" class="w-full shrink-0">
+            <div id="shared320AdSlot" class="wallzy-ad-frame-320"><div class="wallzy-ad-frame-inner">
+                <div id="shared320Ad" data-wallzy-ad="320x50"></div>
+            </div></div>
+        </div>
+
+
+            <div id="wallpaperGridContainer">
+                <div id="wallpaperGrid" class="grid grid-cols-2 gap-3.5">
+                    <div class="relative group rounded-3xl overflow-hidden aspect-[9/16] shadow-sm skeleton-wave"></div>
+                    <div class="relative group rounded-3xl overflow-hidden aspect-[9/16] shadow-sm skeleton-wave"></div>
+                    <div class="relative group rounded-3xl overflow-hidden aspect-[9/16] shadow-sm skeleton-wave"></div>
+                    <div class="relative group rounded-3xl overflow-hidden aspect-[9/16] shadow-sm skeleton-wave"></div>
+                </div>
+
+                <div id="paginationContainer" class="py-6 text-center hidden">
+                    <button id="loadMoreBtn" onclick="loadMoreWallpapers()" class="w-full py-3 bg-[#121215] border border-white/10 hover:bg-[#222228] text-gray-200 rounded-2xl text-xs font-semibold transition cursor-pointer shadow-sm">
+                        Explore more (<span id="remainingCount">0</span>)
+                    </button>
+                </div>
+
+        <div class="w-full flex justify-center items-center pt-[30px] pb-8">
+            <div class="flex items-center justify-center gap-3 text-[12px] text-white/70 font-bold">
+                <a href="/terms" class="hover:text-white transition">Terms of Use</a>
+                <span class="text-white/40">|</span>
+                <a href="/privacy" class="hover:text-white transition">Privacy Policy</a>
+                <span class="text-white/40">|</span>
+                <a href="/contact" class="hover:text-white transition">Contact</a>
+            </div>
+        </div>
+            </div>
+
+            <!-- Gradient Studio Container -->
+            <div id="gradientStudioContainer" class="hidden space-y-4">
+                <div class="bg-[#0a0a0c] border border-white/10 p-4 rounded-3xl space-y-4 shadow-xl">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-wider">Gradient Studio</h3>
+                        <span class="text-[10px] text-gray-400">Create custom gradients</span>
+                    </div>
+
+                    <div id="gradientPreviewBox" class="w-full h-44 rounded-2xl shadow-inner border border-white/10 flex items-center justify-center relative overflow-hidden transition-all duration-300">
+                        <div class="absolute bottom-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-semibold text-white border border-white/10" id="gradientTextInfo">Linear 45°</div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-[#000000] p-3 rounded-2xl border border-white/10 flex items-center justify-between">
+                            <span class="text-[11px] text-gray-400 font-medium">Color 1</span>
+                            <input type="color" id="gradColor1" value="#111111" class="w-8 h-8 rounded-xl bg-transparent border-0 cursor-pointer">
+                        </div>
+                        <div class="bg-[#000000] p-3 rounded-2xl border border-white/10 flex items-center justify-between">
+                            <span class="text-[11px] text-gray-400 font-medium">Color 2</span>
+                            <input type="color" id="gradColor2" value="#ffffff" class="w-8 h-8 rounded-xl bg-transparent border-0 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] text-gray-400 font-medium">Gradient Style</label>
+                        <select id="gradType" class="w-full bg-[#000000] border border-white/10 rounded-2xl p-3 text-xs text-white focus:outline-none transition">
+                            <option value="to right">Horizontal (Left to Right)</option>
+                            <option value="to bottom">Vertical (Top to Bottom)</option>
+                            <option value="to bottom right" selected>Diagonal (Top-Left to Bottom-Right)</option>
+                            <option value="circle">Radial (Center)</option>
+                        </select>
+                    </div>
+
+                    <div class="flex space-x-2 pt-1">
+                        <button onclick="saveCustomGradient()" class="flex-1 bg-white hover:bg-gray-200 text-black font-semibold py-3 rounded-2xl text-xs transition cursor-pointer shadow">
+                            <i class="fa-solid fa-bookmark mr-1 text-black"></i> Save
+                        </button>
+                        <button onclick="downloadCustomGradient()" class="flex-1 bg-[#121215] hover:bg-[#222228] text-white font-semibold py-3 rounded-2xl text-xs transition cursor-pointer border border-white/10">
+                            <i class="fa-solid fa-download mr-1 text-white"></i> Download
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-2 pt-2">
+                    <h4 class="text-xs font-bold text-white px-1">Your Gradients (<span id="savedGradientCount">0</span>)</h4>
+                    <div id="savedGradientGrid" class="grid grid-cols-2 gap-3.5"></div>
+                </div>
+</div>
+
+            <!-- TikTok Downloader Container -->
+            <div id="tiktokDownloaderContainer" class="hidden space-y-4 pt-2">
+                <div class="bg-[#0a0a0c] border border-white/10 p-5 rounded-3xl space-y-4 shadow-xl">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white/5 text-white rounded-2xl flex items-center justify-center text-lg border border-white/10">
+                            <i class="fa-brands fa-tiktok text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">TikTok Downloader</h3>
+                            <p class="text-[10px] text-gray-400">Download watermark-free photos from TikTok posts</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-center">
+                        <input type="text" id="tiktokUrlInput" placeholder="Paste a TikTok photo post link..." class="w-full bg-[#000000] border border-white/10 rounded-2xl py-3.5 pl-4 pr-16 text-[16px] sm:text-xs text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition shadow-inner">
+                        <button onclick="pasteToTikTokInput()" class="absolute right-2 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl px-3 py-1.5 text-[10px] uppercase tracking-wider transition cursor-pointer active:scale-95">
+                            Dán
+                        </button>
+                    </div>
+
+                    <button id="fetchTikTokBtn" onclick="fetchTikTokImages()" class="w-full bg-white hover:bg-gray-200 text-black font-bold py-3.5 rounded-2xl text-xs transition cursor-pointer shadow flex items-center justify-center space-x-2">
+                        <i id="tiktokBtnIcon" class="fa-solid fa-magnifying-glass"></i>
+                        <span id="tiktokBtnText">Get Images</span>
+                    </button>
+                </div>
+
+                <div id="tiktokResultArea" class="hidden space-y-3 pt-2">
+                    <div class="flex items-center justify-between px-1">
+                        <h4 class="text-xs font-bold text-white">Result Images (<span id="tiktokImageCount">0</span>)</h4>
+                        <span class="text-[10px] text-gray-400">Tap to download directly</span>
+                    </div>
+                    <div id="tiktokImageGrid" class="grid grid-cols-2 gap-3.5"></div>
+                </div>
+</div>
+        <div id="shared300AdSlot" class="wallzy-ad-frame-300"><div class="wallzy-ad-frame-inner">
+            <div id="shared300Ad" data-wallzy-ad="300x250"></div>
+        </div></div>
+        </main>
+
+        <footer id="footerEl" class="absolute bottom-12 inset-x-6 bg-[#0a0a0c]/90 backdrop-blur-xl border border-white/10 py-2.5 px-6 flex justify-around items-center flex-shrink-0 z-30 transition-all duration-300 ease-in-out rounded-full shadow-2xl">
+            <button id="navExploreBtn" onclick="switchMainTab('explore', this)" class="flex flex-col items-center space-y-0.5 text-white cursor-pointer transition">
+                <i class="fa-regular fa-compass text-xs text-white"></i>
+                <span class="text-[9px] font-semibold">Explore</span>
+            </button>
+            <div class="w-[1px] h-4 bg-white/10"></div>
+            <button id="navFavBtn" onclick="switchMainTab('favorites', this)" class="flex flex-col items-center space-y-0.5 text-gray-400 hover:text-white cursor-pointer transition">
+                <i class="fa-regular fa-heart text-xs text-gray-400"></i>
+                <span class="text-[9px] font-semibold">Favorites</span>
+            </button>
+            <div class="w-[1px] h-4 bg-white/10"></div>
+            <button id="navStudioBtn" onclick="switchMainTab('studio', this)" class="flex flex-col items-center space-y-0.5 text-gray-400 hover:text-white cursor-pointer transition">
+                <i class="fa-solid fa-palette text-xs text-gray-400"></i>
+                <span class="text-[9px] font-semibold">Studio</span>
+            </button>
+            <div class="w-[1px] h-4 bg-white/10"></div>
+            <button id="navTikTokBtn" onclick="switchMainTab('tiktok', this)" class="flex flex-col items-center space-y-0.5 text-gray-400 hover:text-white cursor-pointer transition">
+                <i class="fa-brands fa-tiktok text-xs text-gray-400"></i>
+                <span class="text-[9px] font-semibold">TikTok</span>
+            </button>
+        </footer>
+
+
+    </div>
+
+    <div id="adModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[1500] hidden flex flex-col items-center justify-center p-5 animate-fade-in">
+        <div class="relative bg-[#0a0a0c] border border-white/10 rounded-3xl shadow-2xl p-3 w-[326px] max-w-[92vw]">
+            <div class="flex items-center justify-between px-1 pb-2">
+                <span class="text-[10px] uppercase tracking-widest text-white/45">Advertisement</span>
+                <div class="flex items-center gap-2">
+                    <span id="downloadAdCountdown" class="text-[10px] font-semibold text-white/70">5s</span>
+                    <button id="downloadAdClose" onclick="closeDownloadAdModal()" class="hidden w-6 h-6 rounded-full bg-white/10 hover:bg-white/15 text-white/70 hover:text-white items-center justify-center text-[10px] cursor-pointer border border-white/10" title="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="adModalSlot" class="w-[300px] max-w-full h-[250px] mx-auto flex items-center justify-center overflow-hidden rounded-2xl"></div>
+            <div class="text-center pt-3 pb-1 text-[10px] leading-4 text-white/40">To keep the website running, please watch the advertisement.</div>
+            <div id="downloadAdWaiting" class="text-center pt-3 pb-1 text-[10px] text-white/40">Please wait...</div>
+            <button id="downloadAdSkip" onclick="skipDownloadAdAndStart()" disabled class="w-full mt-2 bg-white/10 text-white/30 font-semibold py-3 rounded-2xl text-[11px] uppercase tracking-wider cursor-not-allowed transition">
+                Download
+            </button>
+        </div>
+    </div>
+
+    <div id="installModal" class="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[1400] hidden flex flex-col items-center justify-center p-5 animate-fade-in">
+        <div class="bg-[#0a0a0c] border border-white/10 p-6 rounded-3xl max-w-sm w-full space-y-4 shadow-2xl relative">
+            <button onclick="closeInstallModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xs w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-white/5 text-white rounded-2xl flex items-center justify-center text-lg border border-white/10">
+                    <i class="fa-solid fa-mobile-screen-button text-white"></i>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Add to Home Screen</h3>
+                    <p class="text-[10px] text-gray-400">Smooth app experience</p>
+                </div>
+            </div>
+            <div class="space-y-3 pt-2 text-[11px] text-gray-300">
+                <div class="bg-[#000000] p-3 rounded-2xl border border-white/10 space-y-1">
+                    <div class="font-bold text-white flex items-center"><i class="fa-brands fa-apple text-sm mr-1.5 text-white"></i> iPhone (Safari):</div>
+                    <p class="text-gray-400 leading-relaxed">1. Tap <b class="text-white">Share</b> button.<br>2. Select <b class="text-white">"Add to Home Screen"</b>.</p>
+                </div>
+                <div class="bg-[#000000] p-3 rounded-2xl border border-white/10 space-y-1">
+                    <div class="font-bold text-white flex items-center"><i class="fa-brands fa-android text-sm mr-1.5 text-white"></i> Android (Chrome):</div>
+                    <p class="text-gray-400 leading-relaxed">1. Tap <b class="text-white">3-dot menu</b>.<br>2. Select <b class="text-white">"Add to Home Screen"</b>.</p>
+                </div>
+            </div>
+            <button onclick="closeInstallModal()" class="w-full bg-white text-black font-semibold py-3 rounded-2xl transition text-xs cursor-pointer shadow">Got it</button>
+        </div>
+    </div>
+
+    <h1 id="modalSeoTitle" class="sr-only"></h1>
+    <div id="detailModal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[1000] hidden flex flex-col justify-between p-5 animate-fade-in">
+        <div class="flex justify-between items-center relative z-10 w-full pt-1 flex-shrink-0">
+            <button onclick="closeModal()" class="modal-action-button text-white text-xs bg-[#121215] hover:bg-[#222228] backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center cursor-pointer border border-white/20 shadow-lg" title="Back">
+                <i class="fa-solid fa-arrow-left text-white"></i>
+            </button>
+            <div class="text-center">
+                <span class="text-[10px] font-semibold uppercase tracking-widest text-white/90 bg-[#121215]/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 shadow-lg" id="modalCategory">Database</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="toggleFavoriteCurrent()" class="modal-action-button text-white text-xs bg-[#121215] hover:bg-[#222228] backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center cursor-pointer border border-white/20 shadow-lg" title="Favorite">
+                    <i id="modalFavIcon" class="fa-regular fa-heart text-white"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 flex items-center justify-center p-2 relative my-2 overflow-hidden" id="imageWrapperContainer">
+            <div id="modalImgSkel" class="absolute inset-4 rounded-2xl skeleton-wave"></div>
+            <img id="detailImg" src="" decoding="async" alt="Detail" class="max-h-full max-w-full object-contain rounded-2xl shadow-2xl transition-opacity duration-300 opacity-0 relative z-10 pointer-events-none select-none" onload="this.classList.remove('opacity-0'); document.getElementById('modalImgSkel')?.classList.add('hidden');" onerror="window.handleModalImageError(this)">
+        </div>
+        
+        <div class="relative z-10 flex flex-col space-y-2.5 p-1 w-full max-w-sm mx-auto flex-shrink-0">
+            <button onclick="shareCurrentWallpaper()" class="modal-action-button w-full bg-[#121215] hover:bg-[#222228] text-white font-semibold py-3 rounded-2xl shadow-xl flex items-center justify-center space-x-2 cursor-pointer border border-white/20">
+                <i class="fa-solid fa-share-nodes text-xs text-white"></i>
+                <span class="text-[11px] uppercase tracking-wider font-semibold">Share Wallpaper</span>
+            </button>
+            <button onclick="showRewardedAdThenDownload()" class="modal-action-button w-full bg-white hover:bg-gray-200 text-black font-semibold py-3.5 rounded-2xl shadow-xl flex items-center justify-center space-x-2 cursor-pointer">
+                <i class="fa-solid fa-download text-xs text-black"></i>
+                <span class="text-[11px] uppercase tracking-wider font-semibold">Download 4K UHD</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="msgModal" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-[1200] hidden flex flex-col items-center justify-center p-4 animate-fade-in">
+        <div class="bg-[#0a0a0c] border border-white/10 p-6 rounded-3xl max-w-xs w-full text-center space-y-4 shadow-2xl">
+            <p id="msgText" class="text-xs text-gray-200 font-medium"></p>
+            <button onclick="closeMsgModal()" class="w-full bg-white text-black font-semibold py-2.5 rounded-xl transition text-xs cursor-pointer">Got it</button>
+        </div>
+    </div>
+
+    <div id="authModal" class="fixed inset-0 bg-black/85 backdrop-blur-xl z-[1250] hidden flex flex-col items-center justify-center p-5 animate-fade-in">
+        <div class="bg-[#0a0a0c] border border-white/10 p-6 rounded-3xl max-w-xs w-full text-center space-y-5 shadow-2xl relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xs w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center mx-auto text-xl shadow-lg">
+                <i class="fa-solid fa-cloud text-black"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="text-sm font-bold text-white">Google Account</h3>
+                <p class="text-[11px] text-gray-400 leading-relaxed">Sign in to sync your favorite wallpapers across devices.</p>
+            </div>
+            <div id="loggedOutView" class="space-y-2.5 pt-1">
+                <button id="googleLoginBtn" onclick="loginWithGoogleReal()" class="w-full bg-white hover:bg-gray-200 text-black font-semibold py-3 px-4 rounded-2xl shadow-md transition flex items-center justify-center space-x-2.5 text-xs cursor-pointer">
+                    <i id="googleIcon" class="fa-brands fa-google text-sm text-black"></i>
+                    <span id="googleLoginText">Sign in with Google</span>
+                </button>
+            </div>
+            <div id="loggedInView" class="space-y-3 pt-2 hidden">
+                <div class="flex items-center space-x-3 bg-[#000000] p-3 rounded-2xl border border-white/10 text-left">
+                    <img id="userAvatar" src="" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
+                    <div class="overflow-hidden">
+                        <div id="userName" class="text-xs font-bold text-white truncate">User Name</div>
+                        <div id="userEmail" class="text-[10px] text-gray-400 truncate">email@domain.com</div>
+                    </div>
+                </div>
+                <div id="userIdDisplay" class="text-[9px] text-gray-300 font-mono text-left truncate px-1">UID: ...</div>
+                <button onclick="logoutUser()" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2.5 rounded-xl transition text-xs cursor-pointer border border-white/20">
+                    <i class="fa-solid fa-right-from-bracket mr-1.5 text-white"></i> Sign out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/ripple.js"></script>
+    <script src="/js/ads.js"></script>
+
+    <script>
+        // Fail-safe splash: do not block the app if a module/CDN import fails.
+        (() => {
+            const hideSplash = () => {
+                const splash = document.getElementById('splashScreen');
+                const body = document.getElementById('bodyElement');
+                if (!splash) return;
+                splash.style.opacity = '0';
+                if (body) body.classList.remove('overflow-hidden');
+                setTimeout(() => { splash.style.display = 'none'; }, 350);
+            };
+            window.__wallzyHideSplash = hideSplash;
+            setTimeout(hideSplash, 5000);
+            window.addEventListener('error', () => setTimeout(hideSplash, 50));
+            window.addEventListener('unhandledrejection', () => setTimeout(hideSplash, 50));
+        })();
+    </script>
+
+    <script type="module" src="/js/app.js"></script>
+</body>
+</html>
