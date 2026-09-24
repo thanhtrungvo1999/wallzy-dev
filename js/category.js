@@ -30,8 +30,13 @@ export function createCategoryController({
             return;
         }
 
+        const wallpaperSource = [
+            ...getWallpapers(),
+            ...(getCloudUploadedImages?.() || [])
+        ];
+
         let categories = Array.from(new Set(
-            getWallpapers()
+            wallpaperSource
                 .map(w => w.category?.trim())
                 .filter(Boolean)
         ));
@@ -101,4 +106,3 @@ export function createCategoryController({
         }
     };
 }
-// Vercel deployment trigger: category layout refresh.
