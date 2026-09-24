@@ -13,6 +13,7 @@ const firebaseConfig = {
 export async function initFirebase({
     onImagesLoaded,
     onImagesError,
+    onCategoriesLoaded,
     onAuthUser,
     onFavorites,
     onGradients
@@ -57,6 +58,11 @@ export async function initFirebase({
             imagesLoading = false;
         }
     }
+
+    getDocs(imagesCollection).then(snapshot => {
+        const categories = Array.from(new Set(snapshot.docs.map(docSnap => docSnap.data()?.category?.trim()).filter(Boolean)));
+        onCategoriesLoaded?.(categories);
+    }).catch(error => console.warn('[Wallzy] Category metadata load failed:', error));
 
     loadImagePage().then(page => {
         onImagesLoaded?.(page.images, page.hasMore);

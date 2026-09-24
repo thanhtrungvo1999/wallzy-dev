@@ -13,6 +13,7 @@ import { createWallpaperRenderer } from "./wallpaper-renderer.js";
         let wallpapers = [], cloudFavorites = [], cloudCustomGradients = [], cloudUploadedImages = [];
         let hasMoreCloudImages = false, isLoadingMoreCloudImages = false, loadMoreImagesFromFirebase = null, getImageByIdFromFirebase = null;
         let currentSelectedWallpaper = null, currentTab = 'explore', currentCategory = 'all', searchQuery = '';
+        let cloudCategories = [];
         let displayedCount = 20, loadStepCount = 20, isSkeletonActive = true, isWallpaperDataReady = false, invalidUrlActive = false;
         const SKELETON_MIN_TIME = 700;
         const skeletonStartedAt = Date.now();
@@ -108,6 +109,10 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
                         const elapsed = Date.now() - skeletonStartedAt;
                         const remaining = Math.max(0, SKELETON_MIN_TIME - elapsed);
                         setTimeout(finishInitialLoad, remaining);
+                    },
+                    onCategoriesLoaded: categories => {
+                        cloudCategories = Array.isArray(categories) ? categories : [];
+                        categoryController.renderCategoryNav();
                     },
                     onImagesError: () => {
                         isSkeletonActive = false; isWallpaperDataReady = true; cloudUploadedImages = [];
@@ -270,6 +275,7 @@ window.__wallzyGetCurrentWallpaper = () => currentSelectedWallpaper;
         const categoryController = createCategoryController({
             getWallpapers: () => wallpapers,
             getCloudUploadedImages: () => cloudUploadedImages,
+            getCloudCategories: () => cloudCategories,
             getCurrentCategory: () => currentCategory,
             setCurrentCategory: value => { currentCategory = value; },
             resetDisplayedCount: () => { displayedCount = 20; },
