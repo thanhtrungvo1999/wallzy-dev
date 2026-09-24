@@ -101,3 +101,4 @@ export function createCategoryController({
         }
     };
 }
+// Vercel deployment trigger: category layout refresh.
