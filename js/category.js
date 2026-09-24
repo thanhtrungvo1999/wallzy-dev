@@ -1,6 +1,7 @@
 export function createCategoryController({
     getWallpapers,
     getCloudUploadedImages,
+    getCloudCategories,
     getCurrentCategory,
     setCurrentCategory,
     resetDisplayedCount,
@@ -35,11 +36,10 @@ export function createCategoryController({
             ...(getCloudUploadedImages?.() || [])
         ];
 
-        let categories = Array.from(new Set(
-            wallpaperSource
-                .map(w => w.category?.trim())
-                .filter(Boolean)
-        ));
+        let categories = Array.from(new Set([
+            ...(getCloudCategories?.() || []),
+            ...wallpaperSource.map(w => w.category?.trim()).filter(Boolean)
+        ]));
         categories.sort((a, b) => a.localeCompare(b));
 
         const otherIndex = categories.findIndex(c => c.toLowerCase() === 'other');
